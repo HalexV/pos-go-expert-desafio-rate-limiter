@@ -2,6 +2,7 @@ package limit
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
@@ -21,12 +22,12 @@ type RedisLimitRepository struct {
 	Mutex *sync.Mutex
 }
 
-func NewRedisLimitRepository() *RedisLimitRepository {
+func NewRedisLimitRepository(host string, port string) *RedisLimitRepository {
 	return &RedisLimitRepository{
 		Rdb: redis.NewClient(&redis.Options{
-			Addr:     "localhost:6379",
-			Password: "", // no password
-			DB:       0,  // use default DB
+			Addr:     fmt.Sprintf("%s:%s", host, port),
+			Password: "",
+			DB:       0,
 			Protocol: 2,
 		}),
 		Mutex: &sync.Mutex{},
