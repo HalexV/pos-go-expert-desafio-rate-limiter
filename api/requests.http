@@ -1,0 +1,12 @@
+GET http://localhost:8080/rate-limit HTTP/1.1
+# Api-key: descomente e cole aqui sem as aspas
+
+###
+
+POST http://localhost:8080/generate_token HTTP/1.1
+Content-Type: application/json
+
+{
+    "max_reqs_by_sec": 2,
+    "block_time_by_sec": 2
+}
