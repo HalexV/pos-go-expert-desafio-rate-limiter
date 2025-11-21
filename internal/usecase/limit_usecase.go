@@ -16,7 +16,7 @@ type LimitInputDTO struct {
 }
 
 type LimitOutputDTO struct {
-	pass bool
+	Pass bool
 }
 
 type MapLimitValue struct {
@@ -67,6 +67,7 @@ func (l *LimitUseCase) triggerUpdateAndClearRoutine(ctx context.Context) {
 				if len(l.CacheLimit) == 0 {
 					println("o cache é zero")
 					l.ClearMutex.Unlock()
+					l.timer.Reset(TIMER_DURATION)
 					continue
 				}
 				l.ClearMutex.Unlock()
@@ -111,7 +112,7 @@ func (l *LimitUseCase) Execute(ctx context.Context, input LimitInputDTO) (LimitO
 		limitData, err := l.LimitRepository.GetLimitById(ctx, input.Id)
 		if err != nil {
 			l.UseCaseMutex.Unlock()
-			return LimitOutputDTO{pass: false}, err
+			return LimitOutputDTO{Pass: false}, err
 		}
 		// Not found, create
 		if limitData == nil {
@@ -124,7 +125,7 @@ func (l *LimitUseCase) Execute(ctx context.Context, input LimitInputDTO) (LimitO
 			err = l.LimitRepository.CreateLimit(ctx, newLimitData)
 			if err != nil {
 				l.UseCaseMutex.Unlock()
-				return LimitOutputDTO{pass: false}, err
+				return LimitOutputDTO{Pass: false}, err
 			}
 			l.CacheLimit[input.Id] = &MapLimitValue{
 				Data:  newLimitData,
@@ -132,7 +133,7 @@ func (l *LimitUseCase) Execute(ctx context.Context, input LimitInputDTO) (LimitO
 			}
 
 			l.UseCaseMutex.Unlock()
-			return LimitOutputDTO{pass: true}, nil
+			return LimitOutputDTO{Pass: true}, nil
 		}
 
 		// Não está no cache mas está no repository
@@ -162,10 +163,16 @@ func (l *LimitUseCase) Execute(ctx context.Context, input LimitInputDTO) (LimitO
 				Counter: 1,
 			}
 
-			return LimitOutputDTO{pass: true}, nil
+			return LimitOutputDTO{Pass: true}, nil
 		}
 		// Não passou o tempo de bloqueio
-		return LimitOutputDTO{pass: false}, nil
+		// Vou ser mal e reiniciar o tempo de bloqueio
+
+		t := time.Now().Add(time.Duration(input.BlockTimeBySec) * time.Second)
+		l.CacheLimit[input.Id].Data.FreeAt = &t
+		l.CacheLimit[input.Id].Data.LastAt = time.Now()
+
+		return LimitOutputDTO{Pass: false}, nil
 	}
 
 	// Passou um segundo sem requisição
@@ -178,7 +185,7 @@ func (l *LimitUseCase) Execute(ctx context.Context, input LimitInputDTO) (LimitO
 			Counter: 1,
 		}
 
-		return LimitOutputDTO{pass: true}, nil
+		return LimitOutputDTO{Pass: true}, nil
 	}
 
 	// Atingiu o máximo de requisições por segundo
@@ -192,7 +199,7 @@ func (l *LimitUseCase) Execute(ctx context.Context, input LimitInputDTO) (LimitO
 			Counter: 1,
 		}
 
-		return LimitOutputDTO{pass: false}, nil
+		return LimitOutputDTO{Pass: false}, nil
 	}
 
 	// Incrementa o counter e ok
@@ -203,6 +210,6 @@ func (l *LimitUseCase) Execute(ctx context.Context, input LimitInputDTO) (LimitO
 		Counter: mapLimitValue.Data.Counter + 1,
 	}
 
-	return LimitOutputDTO{pass: true}, nil
+	return LimitOutputDTO{Pass: true}, nil
 
 }

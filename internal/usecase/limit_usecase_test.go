@@ -30,7 +30,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_one_single_requ
 		BlockTimeBySec: 5,
 	})
 	suite.Nil(err)
-	suite.True(output.pass)
+	suite.True(output.Pass)
 }
 
 func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_one_single_request_and_cachelimit_has_one() {
@@ -41,7 +41,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_one_single_requ
 		BlockTimeBySec: 5,
 	})
 	suite.Nil(err)
-	suite.True(output.pass)
+	suite.True(output.Pass)
 	suite.Equal(1, len(suite.Sut.CacheLimit))
 	suite.Equal(myID, suite.Sut.CacheLimit[myID].Data.Id)
 
@@ -58,7 +58,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_two_same_reques
 		BlockTimeBySec: int32(blockTimeBySec),
 	})
 	suite.Nil(err)
-	suite.True(output1.pass)
+	suite.True(output1.Pass)
 	suite.Equal(1, len(suite.Sut.CacheLimit))
 	suite.Equal(myID, suite.Sut.CacheLimit[myID].Data.Id)
 
@@ -68,7 +68,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_two_same_reques
 		BlockTimeBySec: int32(blockTimeBySec),
 	})
 	suite.Nil(err)
-	suite.True(output2.pass)
+	suite.True(output2.Pass)
 	suite.Equal(myID, suite.Sut.CacheLimit[myID].Data.Id)
 	suite.Equal(int32(2), suite.Sut.CacheLimit[myID].Data.Counter)
 
@@ -95,7 +95,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_block_after_five_sam
 		BlockTimeBySec: int32(blockTimeBySec),
 	})
 	suite.Nil(err)
-	suite.True(output1.pass)
+	suite.True(output1.Pass)
 	suite.Equal(1, len(suite.Sut.CacheLimit))
 	suite.Equal(myID, suite.Sut.CacheLimit[myID].Data.Id)
 	suite.Nil(suite.Sut.CacheLimit[myID].Data.FreeAt)
@@ -106,7 +106,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_block_after_five_sam
 		BlockTimeBySec: int32(blockTimeBySec),
 	})
 	suite.Nil(err)
-	suite.True(output2.pass)
+	suite.True(output2.Pass)
 	suite.Equal(myID, suite.Sut.CacheLimit[myID].Data.Id)
 	suite.Equal(int32(2), suite.Sut.CacheLimit[myID].Data.Counter)
 	suite.Nil(suite.Sut.CacheLimit[myID].Data.FreeAt)
@@ -117,7 +117,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_block_after_five_sam
 		BlockTimeBySec: int32(blockTimeBySec),
 	})
 	suite.Nil(err)
-	suite.True(output3.pass)
+	suite.True(output3.Pass)
 	suite.Equal(myID, suite.Sut.CacheLimit[myID].Data.Id)
 	suite.Equal(int32(3), suite.Sut.CacheLimit[myID].Data.Counter)
 	suite.Nil(suite.Sut.CacheLimit[myID].Data.FreeAt)
@@ -128,7 +128,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_block_after_five_sam
 		BlockTimeBySec: int32(blockTimeBySec),
 	})
 	suite.Nil(err)
-	suite.True(output4.pass)
+	suite.True(output4.Pass)
 	suite.Equal(myID, suite.Sut.CacheLimit[myID].Data.Id)
 	suite.Equal(int32(4), suite.Sut.CacheLimit[myID].Data.Counter)
 	suite.Nil(suite.Sut.CacheLimit[myID].Data.FreeAt)
@@ -139,7 +139,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_block_after_five_sam
 		BlockTimeBySec: int32(blockTimeBySec),
 	})
 	suite.Nil(err)
-	suite.True(output5.pass)
+	suite.True(output5.Pass)
 	suite.Equal(myID, suite.Sut.CacheLimit[myID].Data.Id)
 	suite.Equal(int32(5), suite.Sut.CacheLimit[myID].Data.Counter)
 	suite.Nil(suite.Sut.CacheLimit[myID].Data.FreeAt)
@@ -150,7 +150,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_block_after_five_sam
 		BlockTimeBySec: int32(blockTimeBySec),
 	})
 	suite.Nil(err)
-	suite.False(output6.pass)
+	suite.False(output6.Pass)
 	suite.Equal(myID, suite.Sut.CacheLimit[myID].Data.Id)
 	suite.Equal(int32(1), suite.Sut.CacheLimit[myID].Data.Counter)
 	suite.NotNil(suite.Sut.CacheLimit[myID].Data.FreeAt)
@@ -176,14 +176,14 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_third_request_a
 
 	output1, err := suite.Sut.Execute(context.Background(), limitInput)
 	suite.Nil(err)
-	suite.True(output1.pass)
+	suite.True(output1.Pass)
 	suite.Equal(1, len(suite.Sut.CacheLimit))
 	suite.Equal(limitInput.Id, suite.Sut.CacheLimit[limitInput.Id].Data.Id)
 	suite.Nil(suite.Sut.CacheLimit[limitInput.Id].Data.FreeAt)
 
 	output2, err := suite.Sut.Execute(context.Background(), limitInput)
 	suite.Nil(err)
-	suite.True(output2.pass)
+	suite.True(output2.Pass)
 	suite.Equal(limitInput.Id, suite.Sut.CacheLimit[limitInput.Id].Data.Id)
 	suite.Equal(int32(2), suite.Sut.CacheLimit[limitInput.Id].Data.Counter)
 	suite.Nil(suite.Sut.CacheLimit[limitInput.Id].Data.FreeAt)
@@ -192,7 +192,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_third_request_a
 
 	output3, err := suite.Sut.Execute(context.Background(), limitInput)
 	suite.Nil(err)
-	suite.True(output3.pass)
+	suite.True(output3.Pass)
 	suite.Equal(limitInput.Id, suite.Sut.CacheLimit[limitInput.Id].Data.Id)
 	suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput.Id].Data.Counter)
 	suite.Nil(suite.Sut.CacheLimit[limitInput.Id].Data.FreeAt)
@@ -226,7 +226,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output1, err := suite.Sut.Execute(context.Background(), limitInput1)
 		suite.Nil(err)
-		suite.True(output1.pass)
+		suite.True(output1.Pass)
 		suite.Equal(limitInput1.Id, suite.Sut.CacheLimit[limitInput1.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput1.Id].Data.Counter)
 	}()
@@ -237,7 +237,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output2, err := suite.Sut.Execute(context.Background(), limitInput2)
 		suite.Nil(err)
-		suite.True(output2.pass)
+		suite.True(output2.Pass)
 		suite.Equal(limitInput2.Id, suite.Sut.CacheLimit[limitInput2.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput2.Id].Data.Counter)
 	}()
@@ -249,7 +249,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output3, err := suite.Sut.Execute(context.Background(), limitInput3)
 		suite.Nil(err)
-		suite.True(output3.pass)
+		suite.True(output3.Pass)
 		suite.Equal(limitInput3.Id, suite.Sut.CacheLimit[limitInput3.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput3.Id].Data.Counter)
 	}()
@@ -287,7 +287,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output1, err := suite.Sut.Execute(context.Background(), limitInput1)
 		suite.Nil(err)
-		suite.True(output1.pass)
+		suite.True(output1.Pass)
 		suite.Equal(limitInput1.Id, suite.Sut.CacheLimit[limitInput1.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput1.Id].Data.Counter)
 	}()
@@ -298,7 +298,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output2, err := suite.Sut.Execute(context.Background(), limitInput2)
 		suite.Nil(err)
-		suite.True(output2.pass)
+		suite.True(output2.Pass)
 		suite.Equal(limitInput2.Id, suite.Sut.CacheLimit[limitInput2.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput2.Id].Data.Counter)
 	}()
@@ -310,7 +310,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output3, err := suite.Sut.Execute(context.Background(), limitInput3)
 		suite.Nil(err)
-		suite.True(output3.pass)
+		suite.True(output3.Pass)
 		suite.Equal(limitInput3.Id, suite.Sut.CacheLimit[limitInput3.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput3.Id].Data.Counter)
 	}()
@@ -372,7 +372,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output1, err := suite.Sut.Execute(context.Background(), limitInput1)
 		suite.Nil(err)
-		suite.True(output1.pass)
+		suite.True(output1.Pass)
 		suite.Equal(limitInput1.Id, suite.Sut.CacheLimit[limitInput1.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput1.Id].Data.Counter)
 	}()
@@ -383,7 +383,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output2, err := suite.Sut.Execute(context.Background(), limitInput2)
 		suite.Nil(err)
-		suite.True(output2.pass)
+		suite.True(output2.Pass)
 		suite.Equal(limitInput2.Id, suite.Sut.CacheLimit[limitInput2.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput2.Id].Data.Counter)
 	}()
@@ -395,7 +395,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output3, err := suite.Sut.Execute(context.Background(), limitInput3)
 		suite.Nil(err)
-		suite.True(output3.pass)
+		suite.True(output3.Pass)
 		suite.Equal(limitInput3.Id, suite.Sut.CacheLimit[limitInput3.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput3.Id].Data.Counter)
 	}()
@@ -435,7 +435,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output1, err := suite.Sut.Execute(context.Background(), limitInput1)
 		suite.Nil(err)
-		suite.True(output1.pass)
+		suite.True(output1.Pass)
 		suite.Equal(limitInput1.Id, suite.Sut.CacheLimit[limitInput1.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput1.Id].Data.Counter)
 	}()
@@ -446,7 +446,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output2, err := suite.Sut.Execute(context.Background(), limitInput2)
 		suite.Nil(err)
-		suite.True(output2.pass)
+		suite.True(output2.Pass)
 		suite.Equal(limitInput2.Id, suite.Sut.CacheLimit[limitInput2.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput2.Id].Data.Counter)
 	}()
@@ -458,7 +458,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_pass_three_concurren
 
 		output3, err := suite.Sut.Execute(context.Background(), limitInput3)
 		suite.Nil(err)
-		suite.True(output3.pass)
+		suite.True(output3.Pass)
 		suite.Equal(limitInput3.Id, suite.Sut.CacheLimit[limitInput3.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput3.Id].Data.Counter)
 	}()
@@ -534,7 +534,7 @@ func (suite *LimitUseCaseTestSuite) TestLimitUseCase_Should_lock_requests_while_
 
 		output1, err := suite.Sut.Execute(context.Background(), limitInput1)
 		suite.Nil(err)
-		suite.True(output1.pass)
+		suite.True(output1.Pass)
 		suite.Equal(limitInput1.Id, suite.Sut.CacheLimit[limitInput1.Id].Data.Id)
 		suite.Equal(int32(1), suite.Sut.CacheLimit[limitInput1.Id].Data.Counter)
 	}()
