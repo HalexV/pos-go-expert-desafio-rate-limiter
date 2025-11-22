@@ -1,4 +1,23 @@
 services:
+  rate-limit-webserver:
+    image: rate-limit-webserver:0.0
+    container_name: rate-limit-webserver
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - IP_MAX_REQS_BY_SEC=5
+      - IP_BLOCK_TIME_BY_SEC=5
+      - WEB_SERVER_PORT=8080
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=something-secret
+      - JWT_EXPIRES_IN=6000
+    ports:
+      - 8080:8080
+    profiles:
+      - app
   redis:
     image: redis:8.4-rc1-alpine3.22
     container_name: redis
@@ -6,4 +25,3 @@ services:
       - 6379:6379
     profiles:
       - infra
-      - app
